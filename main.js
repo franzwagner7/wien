@@ -39,3 +39,5 @@ let mrk = L.marker([stephansdom.lat, stephansdom.lng]).addTo(sightLayer);
 L.control.scale({
     imperial: false
 }).addTo(map)
+
+L.control.fullscreen().addTo(map)
