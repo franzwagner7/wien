@@ -68,7 +68,13 @@ async function loadSites(url) {
                 Adresse: ${geoJsonPoint.properties.ADRESSE}<br>
                 <a href="${geoJsonPoint.properties.WEITERE_INF}">Weblink</a>
             `;
-            return L.marker(latlng).bindPopup(popup);
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: "icons/photo.png",
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37]
+                })
+            }).bindPopup(popup);
         }
     }).addTo(overlay)
 }
