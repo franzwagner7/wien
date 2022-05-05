@@ -59,7 +59,7 @@ async function loadSites(url) {
 
     L.geoJSON(geojson, {
         pointToLayer: function (geoJsonPoint, latlng) {
-            console.log(geoJsonPoint.properties.WEITERE_INF);
+            //console.log(geoJsonPoint.properties.WEITERE_INF);
             let popup = `
                 <img src="${geoJsonPoint.properties.THUMBNAIL}"
                 alt=""><br>
@@ -78,7 +78,7 @@ async function loadSites(url) {
         }
     }).addTo(overlay)
 }
-//loadSites("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
+loadSites("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
 
 // Load Layer Haltestellen Vienna Sightseeing from Wien OGD as geoJSON
 async function loadStops(url) {
@@ -93,7 +93,7 @@ async function loadStops(url) {
 
     L.geoJSON(geojson, {
         pointToLayer: function (geoJsonPoint, latlng) {
-            console.log(geoJsonPoint.properties);
+            //console.log(geoJsonPoint.properties);
             let popup = `
                 <img src="${geoJsonPoint.properties.THUMBNAIL}"
                 alt=""><br>
