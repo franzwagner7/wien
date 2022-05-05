@@ -50,7 +50,7 @@ let miniMap = new L.Control.MiniMap(L.tileLayer.provider("BasemapAT"), {
 async function loadSites(url) {
     let response = await fetch(url);
     let geojson = await response.json();
-    console.log(geojson)
+    //console.log(geojson)
 
     // Add to overlay
     let overlay = L.featureGroup();
@@ -60,3 +60,18 @@ async function loadSites(url) {
     L.geoJSON(geojson).addTo(overlay)
 }
 loadSites("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
+
+// Load Layer Haltestellen Vienna Sightseeing from Wien OGD as geoJSON
+async function loadStops(url) {
+    let response = await fetch(url);
+    let geojson = await response.json();
+    //console.log(geojson)
+
+    // Add to overlay
+    let overlay = L.featureGroup();
+    layerControl.addOverlay(overlay, "Vienna Sightseeing Haltestellen");
+    overlay.addTo(map);
+
+    L.geoJSON(geojson).addTo(overlay)
+}
+loadStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json");
