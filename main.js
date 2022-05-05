@@ -57,7 +57,20 @@ async function loadSites(url) {
     layerControl.addOverlay(overlay, "Sehenswürdigkeiten");
     overlay.addTo(map);
 
-    L.geoJSON(geojson).addTo(overlay)
+    L.geoJSON(geojson, {
+        pointToLayer: function (geoJsonPoint, latlng) {
+            console.log(geoJsonPoint.properties.WEITERE_INF);
+            let popup = `
+                <img src="${geoJsonPoint.properties.THUMBNAIL}"
+                alt=""><br>
+                <strong>${geoJsonPoint.properties.NAME}</strong>
+                <hr>
+                Adresse: ${geoJsonPoint.properties.ADRESSE}<br>
+                <a href="${geoJsonPoint.properties.WEITERE_INF}">Weblink</a>
+            `;
+            return L.marker(latlng).bindPopup(popup);
+        }
+    }).addTo(overlay)
 }
 loadSites("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
 
@@ -72,9 +85,13 @@ async function loadStops(url) {
     layerControl.addOverlay(overlay, "Vienna Sightseeing Haltestellen");
     overlay.addTo(map);
 
-    L.geoJSON(geojson).addTo(overlay)
+    L.geoJSON(geojson, {
+        pointToLayer: function (geoJsonPoint, latlng) {
+            return L.marker(latlng);
+        }
+    }).addTo(overlay)
 }
-loadStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json");
+//loadStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
 // Load Layer Linien Vienna Sightseeing from Wien OGD as geoJSON
 async function loadLines(url) {
@@ -89,7 +106,7 @@ async function loadLines(url) {
 
     L.geoJSON(geojson).addTo(overlay)
 }
-loadLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json");
+//loadLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
 // Load Layer Fußgängerzonen WIen from Wien OGD as geoJSON
 async function loadZones(url) {
@@ -104,4 +121,19 @@ async function loadZones(url) {
 
     L.geoJSON(geojson).addTo(overlay)
 }
-loadZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json");
+//loadZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json");
+
+// Load Layer Hotels from Wien OGD as geoJSON
+async function loadHotels(url) {
+    let response = await fetch(url);
+    let geojson = await response.json();
+    //console.log(geojson)
+
+    // Add to overlay
+    let overlay = L.featureGroup();
+    layerControl.addOverlay(overlay, "Hotels und Unterkünfte");
+    overlay.addTo(map);
+
+    L.geoJSON(geojson).addTo(overlay)
+}
+//loadHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json");
