@@ -78,7 +78,7 @@ async function loadSites(url) {
         }
     }).addTo(overlay)
 }
-loadSites("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
+//loadSites("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
 
 // Load Layer Haltestellen Vienna Sightseeing from Wien OGD as geoJSON
 async function loadStops(url) {
@@ -93,11 +93,25 @@ async function loadStops(url) {
 
     L.geoJSON(geojson, {
         pointToLayer: function (geoJsonPoint, latlng) {
-            return L.marker(latlng);
+            console.log(geoJsonPoint.properties);
+            let popup = `
+                <img src="${geoJsonPoint.properties.THUMBNAIL}"
+                alt=""><br>
+                <strong>${geoJsonPoint.properties.LINE_NAME}</strong>
+                <hr>
+                Station: ${geoJsonPoint.properties.STAT_NAME}<br>
+            `;
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: "icons/bustour.png",
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37]
+                })
+            }).bindPopup(popup);
         }
     }).addTo(overlay)
 }
-//loadStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json");
+loadStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
 // Load Layer Linien Vienna Sightseeing from Wien OGD as geoJSON
 async function loadLines(url) {
