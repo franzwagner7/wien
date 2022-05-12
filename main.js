@@ -166,8 +166,8 @@ async function loadZones(url) {
     overlay.addTo(map);
 
     L.geoJSON(geojson, {
-        style: function(feature) {
-            return{
+        style: function (feature) {
+            return {
                 color: "#111111",
                 fillColor: "#F012BE",
                 weight: 1,
@@ -197,9 +197,9 @@ async function loadHotels(url) {
     overlay.addTo(map)
     L.geoJSON(geojson, {
         pointToLayer: function (geoJsonPoint, latlng) {
-            let searchList = document.querySelector(`#searchList`); 
+            let searchList = document.querySelector(`#searchList`);
             searchList.innerHTML += `<option value="${geoJsonPoint.properties.BETRIEB}"><\option>`;
-           
+
             let popup = `
                 
                 <strong>${geoJsonPoint.properties.BETRIEB}</strong>
@@ -242,5 +242,14 @@ async function loadHotels(url) {
         }
 
     }).addTo(overlay);
+
+    let form = document.querySelector("#searchForm");
+
+    form.suchen.onclick = function () {
+
+        console.log(form.hotel.value);
+
+    }
+
 }
 loadHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json");
