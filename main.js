@@ -189,6 +189,13 @@ loadZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 async function loadHotels(url) {
     let response = await fetch(url);
     let geojson = await response.json();
+    console.log(geojson.features);
+
+    // Hotels nach Name sortieren
+    geojson.features.sort(function(a, b){
+        return a.properties.BETRIEB.toLowerCase() > b.properties.BETRIEB.toLowerCase()
+    })
+
     let overlay = L.markerClusterGroup({
         disableClusteringAtZoom: 17
     });
