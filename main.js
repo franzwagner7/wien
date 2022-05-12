@@ -189,13 +189,12 @@ loadZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 async function loadHotels(url) {
     let response = await fetch(url);
     let geojson = await response.json();
-    console.log(geojson);
     let overlay = L.markerClusterGroup({
         disableClusteringAtZoom: 17
     });
     layerControl.addOverlay(overlay, "Hotels");
     overlay.addTo(map)
-    L.geoJSON(geojson, {
+    let hotelsLayer = L.geoJSON(geojson, {
         pointToLayer: function (geoJsonPoint, latlng) {
             let searchList = document.querySelector(`#searchList`);
             searchList.innerHTML += `<option value="${geoJsonPoint.properties.BETRIEB}"><\option>`;
@@ -246,9 +245,14 @@ async function loadHotels(url) {
     let form = document.querySelector("#searchForm");
 
     form.suchen.onclick = function () {
-
         console.log(form.hotel.value);
+        hotelsLayer.eachLayer(function (marker) {
 
+            if (form.hotel.value == marker.feature.properties.BETRIEB) {
+                map.setView(marker.getLatLng(), 17);
+                marker.openPopup()
+            }
+        })
     }
 
 }
