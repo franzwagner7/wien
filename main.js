@@ -154,7 +154,7 @@ async function loadLines(url) {
 }
 loadLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
-// Load Layer Fußgängerzonen WIen from Wien OGD as geoJSON
+// Load Layer Fußgängerzonen Wien from Wien OGD as geoJSON
 async function loadZones(url) {
     let response = await fetch(url);
     let geojson = await response.json();
@@ -165,12 +165,21 @@ async function loadZones(url) {
     layerControl.addOverlay(overlay, "Fußgängerzonen");
     overlay.addTo(map);
 
-    L.geoJSON(geojson).bindPopup(
-        function(layer) {
+    L.geoJSON(geojson, {
+        style: function(feature) {
+            return{
+                color: "#111111",
+                fillColor: "#F012BE",
+                weight: 1,
+                fillOpacity: 0.2
+            }
+        }
+    }).bindPopup(
+        function (layer) {
             return `
-            <h4>Fußgängerzone</h4>
-            <h5>${layer.feature.properties.ZEITRAUM}</h5>
-            ${layer.feature.properties.AUSN_TEXT}
+            <h4>Fußgängerzone ${layer.feature.properties.ADRESSE}</h4>
+            <h5>${layer.feature.properties.ZEITRAUM || ""}</h5>
+            ${layer.feature.properties.AUSN_TEXT || ""}
             `;
         }).addTo(overlay)
 }
